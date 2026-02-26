@@ -40,22 +40,26 @@ function main() {
 }
 
 function processTransactions(transactions) {
+    validateTransactions(transactions);
+
+    for (const transaction of transactions) {
+        processTransaction(transaction);
+    }
+}
+
+function validateTransactions(transactions) {
     if (!hasTransactions(transactions)) {
         const error = new Error('No transactions provided!');
         error.code = 1;
         throw error;
     }
-
-    for (const transaction of transactions) {
-        try {
-            processTransaction(transaction);
-        } catch (error) {
-            showErrorMessage(error.message, error.item);
-        }
-    }
 }
 
-function processTransaction(transaction) {
+/**
+ * @throws {Error} Invalid transaction type
+ * @param {object} transaction
+ */
+function validateTransaction(transaction) {
     if (!isOpen(transaction)) {
         const error = new Error('Invalid transaction type!');
         throw error;
@@ -66,7 +70,18 @@ function processTransaction(transaction) {
         error.item = transaction;
         throw error;
     }
+}
 
+function processTransaction(transaction) {
+    try {
+        validateTransaction(transaction);
+        processTransactionByMethod(transaction);
+    } catch (error) {
+        showErrorMessage(error.message, error.item);
+    }
+}
+
+function processTransactionByMethod(transaction) {
     if (usesTransactionMethod(transaction, 'CREDIT_CARD')) {
         processCreditCard(transaction);
     } else if (usesTransactionMethod(transaction, 'PAYPAL')) {
