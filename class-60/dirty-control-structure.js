@@ -48,22 +48,30 @@ function processTransactions(transactions) {
 }
 
 function processTransaction(transaction) {
-    if (transaction.status !== 'OPEN') {
+    if (!isOpen(transaction)) {
         showErrorMessage('Invalid transaction type!');
         return;
     }
 
-    switch (transaction.type) {
-        case 'PAYMENT':
-            processPayment(transaction)
-            break;
-        case 'REFUND':
-            processRefund(transaction)
-            break;
-        default:
-            showErrorMessage('Invalid transaction type!', transaction);
-            break;
+    if (isPayment(transaction)) {
+        processPayment(transaction)
+    } else if (isRefund(transaction)) {
+        processRefund(transaction)
+    } else {
+        showErrorMessage('Invalid transaction type!', transaction);
     }
+}
+
+function isOpen(transaction) {
+    return transaction.status === 'OPEN'
+}
+
+function isPayment(transaction) {
+    return transaction.type === 'PAYMENT'
+}
+
+function isRefund(transaction) {
+    return transaction.type === 'REFUND'
 }
 
 function processPayment(transaction) {
