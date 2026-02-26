@@ -54,46 +54,48 @@ function processTransaction(transaction) {
     }
 
     /**
-     * Aqui tenemos un estado inicial de las bifurcaciones del programa donde se
-     * divide primero en 2 ramas y luego cada rama en tres por separado
+     * Here we have an initial state where the program branches:
+     * it is first forked into two branches, and then each branch
+     * splits into three separate ones.
      *
-     * Es decir que vamos de menor a mayor bifurcaciones
-     * Como las bifurcaciones de tres ramas son mismas condiciones para las dos
-     * primeras ramas podemos disponer las bifurcaciones de cierta forma para poder
-     * tener primero 3 bifurcaciones y luego 2 en cada una de ellas por separado
+     * That is, we go from fewer to more branches.
+     * Since the three-branch splits share the same conditions
+     * for the first two branches, we can reorganize the branching
+     * in such a way that we first apply the three-way split and
+     * then apply the two-way split separately to each resulting branch.
      */
 
-    if (isPayment(transaction)) {
-        processPayment(transaction);
-    } else if (isRefund(transaction)) {
-        processRefund(transaction);
-    } else {
-        showErrorMessage('Invalid transaction type!', transaction);
+    if (usesTransactionMethod(transaction, 'CREDIT_CARD')) {
+        if (isPayment(transaction)) {
+            processCreditCardPayment(transaction);
+            return;
+        } else if (isRefund(transaction)) {
+            processCreditCardRefund(transaction);
+            return;
+        }
+    } else if (usesTransactionMethod(transaction, 'PAYPAL')) {
+        if (isPayment(transaction)) {
+            processPayPalPayment(transaction);
+            return;
+        } else if (isRefund(transaction)) {
+            processPayPalRefund(transaction);
+            return;
+        }
+    } else if (usesTransactionMethod(transaction, 'PLAN')) {
+        if (isPayment(transaction)) {
+            processPlanPayment(transaction);
+            return;
+        } else if (isRefund(transaction)) {
+            processPlanRefund(transaction);
+            return;
+        }
     }
+
+    showErrorMessage('Invalid transaction type!', transaction);
 }
 
 function usesTransactionMethod(transaction, method) {
     return transaction.method === method;
-}
-
-function processPayment(transaction) {
-    if (usesTransactionMethod(transaction, 'CREDIT_CARD')) {
-        processCreditCardPayment(transaction);
-    } else if (usesTransactionMethod(transaction, 'PAYPAL')) {
-        processPayPalPayment(transaction);
-    } else if (usesTransactionMethod(transaction, 'PLAN')) {
-        processPlanPayment(transaction);
-    }
-}
-
-function processRefund(transaction) {
-    if (usesTransactionMethod(transaction, 'CREDIT_CARD')) {
-        processCreditCardRefund(transaction);
-    } else if (usesTransactionMethod(transaction, 'PAYPAL')) {
-        processPayPalRefund(transaction);
-    } else if (usesTransactionMethod(transaction, 'PLAN')) {
-        processPlanRefund(transaction);
-    }
 }
 
 function isOpen(transaction) {
