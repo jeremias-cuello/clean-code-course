@@ -66,33 +66,46 @@ function processTransaction(transaction) {
      */
 
     if (usesTransactionMethod(transaction, 'CREDIT_CARD')) {
-        if (isPayment(transaction)) {
-            processCreditCardPayment(transaction);
-            return;
-        } else if (isRefund(transaction)) {
-            processCreditCardRefund(transaction);
-            return;
-        }
+        processCreditCard(transaction);
     } else if (usesTransactionMethod(transaction, 'PAYPAL')) {
-        if (isPayment(transaction)) {
-            processPayPalPayment(transaction);
-            return;
-        } else if (isRefund(transaction)) {
-            processPayPalRefund(transaction);
-            return;
-        }
+        processPaypal(transaction);
     } else if (usesTransactionMethod(transaction, 'PLAN')) {
-        if (isPayment(transaction)) {
-            processPlanPayment(transaction);
-            return;
-        } else if (isRefund(transaction)) {
-            processPlanRefund(transaction);
-            return;
-        }
+        processPlan(transaction);
+    } else {
+        showErrorMessage('Invalid transaction type!', transaction);
     }
-
-    showErrorMessage('Invalid transaction type!', transaction);
 }
+
+function processCreditCard(transaction) {
+    if (isPayment(transaction)) {
+        processCreditCardPayment(transaction);
+        return;
+    } else if (isRefund(transaction)) {
+        processCreditCardRefund(transaction);
+        return;
+    }
+}
+
+function processPaypal(transaction) {
+    if (isPayment(transaction)) {
+        processPayPalPayment(transaction);
+        return;
+    } else if (isRefund(transaction)) {
+        processPayPalRefund(transaction);
+        return;
+    }
+}
+
+function processPlan(transaction) {
+    if (isPayment(transaction)) {
+        processPlanPayment(transaction);
+        return;
+    } else if (isRefund(transaction)) {
+        processPlanRefund(transaction);
+        return;
+    }
+}
+
 
 function usesTransactionMethod(transaction, method) {
     return transaction.method === method;
