@@ -32,38 +32,40 @@ function main() {
         },
     ];
 
-    processTransactions(transactions);
+    try {
+        processTransactions(transactions);
+    } catch (error) {
+        showErrorMessage(error.message);
+    }
 }
 
 function processTransactions(transactions) {
     if (!hasTransactions(transactions)) {
-        showErrorMessage('No transactions provided!');
-        return;
+        const error = new Error('No transactions provided!');
+        error.code = 1;
+        throw error;
     }
 
     for (const transaction of transactions) {
-        processTransaction(transaction);
+        try {
+            processTransaction(transaction);
+        } catch (error) {
+            showErrorMessage(error.message, error.item);
+        }
     }
-
 }
 
 function processTransaction(transaction) {
     if (!isOpen(transaction)) {
-        showErrorMessage('Invalid transaction type!');
-        return;
+        const error = new Error('Invalid transaction type!');
+        throw error;
     }
 
-    /**
-     * Here we have an initial state where the program branches:
-     * it is first forked into two branches, and then each branch
-     * splits into three separate ones.
-     *
-     * That is, we go from fewer to more branches.
-     * Since the three-branch splits share the same conditions
-     * for the first two branches, we can reorganize the branching
-     * in such a way that we first apply the three-way split and
-     * then apply the two-way split separately to each resulting branch.
-     */
+    if (!isPayment(transaction) && !isRefund(transaction)) {
+        const error = new Error('Invalid transaction type!');
+        error.item = transaction;
+        throw error;
+    }
 
     if (usesTransactionMethod(transaction, 'CREDIT_CARD')) {
         processCreditCard(transaction);
@@ -71,8 +73,6 @@ function processTransaction(transaction) {
         processPaypal(transaction);
     } else if (usesTransactionMethod(transaction, 'PLAN')) {
         processPlan(transaction);
-    } else {
-        showErrorMessage('Invalid transaction type!', transaction);
     }
 }
 
