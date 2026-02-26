@@ -53,6 +53,16 @@ function processTransaction(transaction) {
         return;
     }
 
+    /**
+     * Aqui tenemos un estado inicial de las bifurcaciones del programa donde se
+     * divide primero en 2 ramas y luego cada rama en tres por separado
+     *
+     * Es decir que vamos de menor a mayor bifurcaciones
+     * Como las bifurcaciones de tres ramas son mismas condiciones para las dos
+     * primeras ramas podemos disponer las bifurcaciones de cierta forma para poder
+     * tener primero 3 bifurcaciones y luego 2 en cada una de ellas por separado
+     */
+
     if (isPayment(transaction)) {
         processPayment(transaction)
     } else if (isRefund(transaction)) {
