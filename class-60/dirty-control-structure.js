@@ -53,33 +53,49 @@ function processTransaction(transaction) {
         return;
     }
 
-    if (transaction.type === 'PAYMENT') {
-        if (transaction.method === 'CREDIT_CARD') {
-            processCreditCardPayment(transaction);
-        } else if (transaction.method === 'PAYPAL') {
-            processPayPalPayment(transaction);
-        } else if (transaction.method === 'PLAN') {
-            processPlanPayment(transaction);
-        }
-    } else if (transaction.type === 'REFUND') {
-        if (transaction.method === 'CREDIT_CARD') {
-            processCreditCardRefund(transaction);
-        } else if (transaction.method === 'PAYPAL') {
-            processPayPalRefund(transaction);
-        } else if (transaction.method === 'PLAN') {
-            processPlanRefund(transaction);
-        }
-    } else {
-        showErrorMessage('Invalid transaction type!', transaction);
+    switch (transaction.type) {
+        case 'PAYMENT':
+            processPayment(transaction)
+            break;
+        case 'REFUND':
+            processRefund(transaction)
+            break;
+        default:
+            showErrorMessage('Invalid transaction type!', transaction);
+            break;
     }
 }
 
-function showErrorMessage(message) {
+function processPayment(transaction) {
+    if (transaction.method === 'CREDIT_CARD') {
+        processCreditCardPayment(transaction);
+    } else if (transaction.method === 'PAYPAL') {
+        processPayPalPayment(transaction);
+    } else if (transaction.method === 'PLAN') {
+        processPlanPayment(transaction);
+    }
+}
+
+function processRefund(transaction) {
+    if (transaction.method === 'CREDIT_CARD') {
+        processCreditCardRefund(transaction);
+    } else if (transaction.method === 'PAYPAL') {
+        processPayPalRefund(transaction);
+    } else if (transaction.method === 'PLAN') {
+        processPlanRefund(transaction);
+    }
+}
+
+function showErrorMessage(message, item) {
     console.log(message);
+
+    if (item) {
+        console.log(item);
+    }
 }
 
 function hasTransactions(transactions) {
-    return !transactions || transactions.length <= 0;
+    return transactions && transactions.length >= 0;
 }
 
 function processCreditCardPayment(transaction) {
