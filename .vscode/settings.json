@@ -7,7 +7,7 @@
     "editor.cursorBlinking": "smooth",
     "editor.cursorSmoothCaretAnimation": "on",
     "editor.renderWhitespace": "selection",
-    "editor.minimap.enabled": false,
+    "editor.minimap.enabled": true,
     "workbench.colorTheme": "Default Dark Modern",
     "window.titleBarStyle": "custom",
     "editor.smoothScrolling": true,
@@ -51,7 +51,7 @@
     "git.autofetch": true,
     "git.confirmSync": false,
     "git.enableSmartCommit": true,
-    "diffEditor.ignoreTrimWhitespace": false,
+    "diffEditor.ignoreTrimWhitespace": true,
 
     // ===== Javascript / Typescript =====
     "javascript.suggest.autoImports": true,
@@ -63,5 +63,5 @@
     // ===== Explorador de archivos =====
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
-    "explorer.compactFolders": false
+    "explorer.compactFolders": true
 }
