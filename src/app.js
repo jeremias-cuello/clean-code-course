@@ -1,4 +1,4 @@
-main();
+const transactions = require("./data/dummy-transactions")
 
 const METHODS = {
     CREDIT_CARD: "CREDIT_CARD",
@@ -7,37 +7,6 @@ const METHODS = {
 }
 
 function main() {
-    const transactions = [
-        {
-            id: 't1',
-            type: 'PAYMENT',
-            status: 'OPEN',
-            method: 'CREDIT_CARD',
-            amount: '23.99',
-        },
-        {
-            id: 't2',
-            type: 'PAYMENT',
-            status: 'OPEN',
-            method: 'PAYPAL',
-            amount: '100.43',
-        },
-        {
-            id: 't3',
-            type: 'REFUND',
-            status: 'OPEN',
-            method: 'CREDIT_CARD',
-            amount: '10.99',
-        },
-        {
-            id: 't4',
-            type: 'PAYMENT',
-            status: 'CLOSED',
-            method: 'PLAN',
-            amount: '15.99',
-        },
-    ];
-
     try {
         processTransactions(transactions);
     } catch (error) {
@@ -175,3 +144,5 @@ function processPlanPayment(transaction) {
 function processPlanRefund(transaction) {
     console.log('Processing plan refund for amount: ' + transaction.amount);
 }
+
+main();
