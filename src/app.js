@@ -1,12 +1,8 @@
 const transactions = require("./data/dummy-transactions");
-const getTransactionProcessors = require("./processing/transaction-processors");
-const showErrorMessage = require("./util/error-handling");
-const {
-    hasTransactions,
-    isOpen,
-    isPayment,
-    isRefund,
-} = require("./util/validators")
+
+const { showErrorMessage } = require("./util/error-handling");
+const { validateTransaction, processWithProccessor } = require("./processing/transaction");
+const { validateTransactions } = require("./processing/transactions");
 
 function main() {
     try {
@@ -24,31 +20,6 @@ function processTransactions(transactions) {
     }
 }
 
-function validateTransactions(transactions) {
-    if (!hasTransactions(transactions)) {
-        const error = new Error('No transactions provided!');
-        error.code = 1;
-        throw error;
-    }
-}
-
-/**
- * @throws {Error} Invalid transaction type
- * @param {object} transaction
- */
-function validateTransaction(transaction) {
-    if (!isOpen(transaction)) {
-        const error = new Error('Invalid transaction type!');
-        throw error;
-    }
-
-    if (!isPayment(transaction) && !isRefund(transaction)) {
-        const error = new Error('Invalid transaction type!');
-        error.item = transaction;
-        throw error;
-    }
-}
-
 /**
  * @param {object} transaction
  */
@@ -58,16 +29,6 @@ function processTransaction(transaction) {
         processWithProccessor(transaction);
     } catch (error) {
         showErrorMessage(error.message, error.item);
-    }
-}
-
-function processWithProccessor(transaction) {
-    const processors = getTransactionProcessors(transaction)
-
-    if (isPayment(transaction)) {
-        processors.payment(transaction);
-    } else if (isRefund(transaction)) {
-        processors.refund(transaction);
     }
 }
 

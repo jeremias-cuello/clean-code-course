@@ -56,4 +56,4 @@ function processPlanRefund(transaction) {
     console.log('Processing plan refund for amount: ' + transaction.amount);
 }
 
-module.exports = getTransactionProcessors;
+module.exports = { getTransactionProcessors };

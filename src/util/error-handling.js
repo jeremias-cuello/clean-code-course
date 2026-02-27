@@ -6,4 +6,4 @@ function showErrorMessage(message, item) {
     }
 }
 
-module.exports = showErrorMessage;
+exports.showErrorMessage = showErrorMessage;
