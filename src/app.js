@@ -1,10 +1,5 @@
-const transactions = require("./data/dummy-transactions")
-
-const METHODS = {
-    CREDIT_CARD: "CREDIT_CARD",
-    PAYPAL: "PAYPAL",
-    PLAN: "PLAN",
-}
+const transactions = require("./data/dummy-transactions");
+const getTransactionProcessors = require("./processing/transaction-processors");
 
 function main() {
     try {
@@ -60,37 +55,13 @@ function processTransaction(transaction) {
 }
 
 function processWithProccessor(transaction) {
-    const processors = getTransactionProcessor(transaction)
+    const processors = getTransactionProcessors(transaction)
 
     if (isPayment(transaction)) {
         processors.payment(transaction);
     } else if (isRefund(transaction)) {
         processors.refund(transaction);
     }
-}
-
-function getTransactionProcessor(transaction) {
-    let processors = {
-        payment: null,
-        refund: null,
-    };
-
-    if (usesTransactionMethod(transaction, METHODS.CREDIT_CARD)) {
-        processors.payment = processCreditCardPayment;
-        processors.refund = processCreditCardRefund;
-    } else if (usesTransactionMethod(transaction, METHODS.PAYPAL)) {
-        processors.payment = processPayPalPayment;
-        processors.refund = processPayPalRefund;
-    } else if (usesTransactionMethod(transaction, METHODS.PLAN)) {
-        processors.payment = processPlanPayment;
-        processors.refund = processPlanRefund;
-    }
-
-    return processors;
-}
-
-function usesTransactionMethod(transaction, method) {
-    return transaction.method === method;
 }
 
 function isOpen(transaction) {
@@ -115,34 +86,6 @@ function showErrorMessage(message, item) {
 
 function hasTransactions(transactions) {
     return transactions && transactions.length >= 0;
-}
-
-function processCreditCardPayment(transaction) {
-    console.log(
-        'Processing credit card payment for amount: ' + transaction.amount
-    );
-}
-
-function processCreditCardRefund(transaction) {
-    console.log(
-        'Processing credit card refund for amount: ' + transaction.amount
-    );
-}
-
-function processPayPalPayment(transaction) {
-    console.log('Processing PayPal payment for amount: ' + transaction.amount);
-}
-
-function processPayPalRefund(transaction) {
-    console.log('Processing PayPal refund for amount: ' + transaction.amount);
-}
-
-function processPlanPayment(transaction) {
-    console.log('Processing plan payment for amount: ' + transaction.amount);
-}
-
-function processPlanRefund(transaction) {
-    console.log('Processing plan refund for amount: ' + transaction.amount);
 }
 
 main();
