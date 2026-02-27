@@ -1,0 +1,20 @@
+{
+    "name": "clean-code-my-progress",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jeremias-cuello/clean-code-course.git"
+    },
+    "keywords": [],
+    "author": "cuellojeremiasnatanael@gmail.com",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/jeremias-cuello/clean-code-course/issues"
+    },
+    "homepage": "https://github.com/jeremias-cuello/clean-code-course#readme"
+}

@@ -1,5 +1,11 @@
 main();
 
+const METHODS = {
+    CREDIT_CARD: "CREDIT_CARD",
+    PAYPAL: "PAYPAL",
+    PLAN: "PLAN",
+}
+
 function main() {
     const transactions = [
         {
@@ -72,70 +78,62 @@ function validateTransaction(transaction) {
     }
 }
 
+/**
+ * @param {object} transaction
+ */
 function processTransaction(transaction) {
     try {
         validateTransaction(transaction);
-        processTransactionByMethod(transaction);
+        processWithProccessor(transaction);
     } catch (error) {
         showErrorMessage(error.message, error.item);
     }
 }
 
-function processTransactionByMethod(transaction) {
-    if (usesTransactionMethod(transaction, 'CREDIT_CARD')) {
-        processCreditCard(transaction);
-    } else if (usesTransactionMethod(transaction, 'PAYPAL')) {
-        processPaypal(transaction);
-    } else if (usesTransactionMethod(transaction, 'PLAN')) {
-        processPlan(transaction);
-    }
-}
+function processWithProccessor(transaction) {
+    const processors = getTransactionProcessor(transaction)
 
-function processCreditCard(transaction) {
     if (isPayment(transaction)) {
-        processCreditCardPayment(transaction);
-        return;
+        processors.payment(transaction);
     } else if (isRefund(transaction)) {
-        processCreditCardRefund(transaction);
-        return;
+        processors.refund(transaction);
     }
 }
 
-function processPaypal(transaction) {
-    if (isPayment(transaction)) {
-        processPayPalPayment(transaction);
-        return;
-    } else if (isRefund(transaction)) {
-        processPayPalRefund(transaction);
-        return;
-    }
-}
+function getTransactionProcessor(transaction) {
+    let processors = {
+        payment: null,
+        refund: null,
+    };
 
-function processPlan(transaction) {
-    if (isPayment(transaction)) {
-        processPlanPayment(transaction);
-        return;
-    } else if (isRefund(transaction)) {
-        processPlanRefund(transaction);
-        return;
+    if (usesTransactionMethod(transaction, METHODS.CREDIT_CARD)) {
+        processors.payment = processCreditCardPayment;
+        processors.refund = processCreditCardRefund;
+    } else if (usesTransactionMethod(transaction, METHODS.PAYPAL)) {
+        processors.payment = processPayPalPayment;
+        processors.refund = processPayPalRefund;
+    } else if (usesTransactionMethod(transaction, METHODS.PLAN)) {
+        processors.payment = processPlanPayment;
+        processors.refund = processPlanRefund;
     }
-}
 
+    return processors;
+}
 
 function usesTransactionMethod(transaction, method) {
     return transaction.method === method;
 }
 
 function isOpen(transaction) {
-    return transaction.status === 'OPEN'
+    return transaction.status === 'OPEN';
 }
 
 function isPayment(transaction) {
-    return transaction.type === 'PAYMENT'
+    return transaction.type === 'PAYMENT';
 }
 
 function isRefund(transaction) {
-    return transaction.type === 'REFUND'
+    return transaction.type === 'REFUND';
 }
 
 function showErrorMessage(message, item) {
