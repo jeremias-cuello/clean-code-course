@@ -1,6 +1,12 @@
 const transactions = require("./data/dummy-transactions");
 const getTransactionProcessors = require("./processing/transaction-processors");
 const showErrorMessage = require("./util/error-handling");
+const {
+    hasTransactions,
+    isOpen,
+    isPayment,
+    isRefund,
+} = require("./util/validators")
 
 function main() {
     try {
@@ -63,22 +69,6 @@ function processWithProccessor(transaction) {
     } else if (isRefund(transaction)) {
         processors.refund(transaction);
     }
-}
-
-function isOpen(transaction) {
-    return transaction.status === 'OPEN';
-}
-
-function isPayment(transaction) {
-    return transaction.type === 'PAYMENT';
-}
-
-function isRefund(transaction) {
-    return transaction.type === 'REFUND';
-}
-
-function hasTransactions(transactions) {
-    return transactions && transactions.length >= 0;
 }
 
 main();
