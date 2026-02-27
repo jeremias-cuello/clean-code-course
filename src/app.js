@@ -1,5 +1,6 @@
 const transactions = require("./data/dummy-transactions");
 const getTransactionProcessors = require("./processing/transaction-processors");
+const showErrorMessage = require("./util/error-handling");
 
 function main() {
     try {
@@ -74,14 +75,6 @@ function isPayment(transaction) {
 
 function isRefund(transaction) {
     return transaction.type === 'REFUND';
-}
-
-function showErrorMessage(message, item) {
-    console.log(message);
-
-    if (item) {
-        console.log(item);
-    }
 }
 
 function hasTransactions(transactions) {
