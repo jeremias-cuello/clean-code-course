@@ -63,5 +63,8 @@
     // ===== Explorador de archivos =====
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
-    "explorer.compactFolders": true
+    "explorer.compactFolders": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    }
 }

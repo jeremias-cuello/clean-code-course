@@ -9,7 +9,18 @@
             "request": "launch",
             "name": "Launch Program",
             "skipFiles": ["<node_internals>/**"],
-            "program": "${workspaceFolder}\\src\\app.js"
+            "program": "${workspaceFolder}/section-05/src/app.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch TypeScript",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/section-06/src/polymorphism.ts",
+            "runtimeArgs": ["-r", "ts-node/register"],
+            "env": {
+                "TS_NODE_PROJECT": "tsconfig.json"
+            }
         }
     ]
 }
