@@ -9,7 +9,7 @@ function trackPurchase(product: string) {
 }
 
 function issuePurchase(product: string) {
-    console.log(`Track product: ${product}`);
+    console.log(`Delivery product: ${product}`);
 }
 
 let Logistics: any = {
