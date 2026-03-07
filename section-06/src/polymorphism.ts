@@ -33,63 +33,66 @@ let Logistics: any = {
     },
 };
 
-class Delivery {
+interface Delivery {
+    deliverProduct(): void;
+    trackProduct(): void;
+}
+
+class DeliveryImplementation {
     protected purchase: Purchase;
 
     constructor(purchase: Purchase) {
         this.purchase = purchase;
     }
+}
 
-    deliverProduct() {
-        if (this.purchase.deliveryType === 'express') {
-            Logistics.issueExpressDelivery(this.purchase.product);
-        } else if (this.purchase.deliveryType === 'insured') {
-            Logistics.issueInsuredDelivery(this.purchase.product);
-        } else {
-            Logistics.issueStandardDelivery(this.purchase.product);
-        }
+class DeliveryExpress extends DeliveryImplementation implements Delivery {
+    deliverProduct(): void {
+        Logistics.issueExpressDelivery(this.purchase.product);
     }
 
-    trackProduct() {
-        if (this.purchase.deliveryType === 'express') {
-            Logistics.trackExpressDelivery(this.purchase.product);
-        } else if (this.purchase.deliveryType === 'insured') {
-            Logistics.trackInsuredDelivery(this.purchase.product);
-        } else {
-            Logistics.trackStandardDelivery(this.purchase.product);
-        }
+    trackProduct(): void {
+        Logistics.trackExpressDelivery(this.purchase.product);
     }
 }
 
-// class DeliveryExpress extends Delivery {
-//     deliverProduct(): void {
-//         Logistics.issueExpressDelivery(this.purchase.product);
-//     }
+class DeliveryInsured extends DeliveryImplementation implements Delivery {
+    deliverProduct(): void {
+        Logistics.issueInsuredDelivery(this.purchase.product);
+    }
 
-//     trackProduct(): void {
-//         Logistics.trackExpressDelivery(this.purchase.product);
-//     }
-// }
+    trackProduct(): void {
+        Logistics.trackInsuredDelivery(this.purchase.product);
+    }
+}
 
-// class DeliveryInsured extends Delivery {
-//     deliveryProduct(): void {
-//         Logistics.issueInsuredDelivery(this.purchase.product);
-//     }
+class DeliveryStandard extends DeliveryImplementation implements Delivery {
+    deliverProduct(): void {
+        Logistics.issueStandardDelivery(this.purchase.product);
+    }
 
-//     trackProduct(): void {
-//         Logistics.trackInsuredDelivery(this.purchase.product);
-//     }
-// }
+    trackProduct(): void {
+        Logistics.trackStandardDelivery(this.purchase.product);
+    }
+}
 
-// class DeliveryStandard extends Delivery {
-//     deliveryProduct(): void {
-//         Logistics.issueStandardDelivery(this.purchase.product);
-//     }
+function createDelivery(purchase: Purchase): Delivery {
+    let delivery: Delivery;
 
-//     trackProduct(): void {
-//         Logistics.trackStandardDelivery(this.purchase.product);
-//     }
-// }
+    switch (purchase.deliveryType) {
+        case 'express':
+            delivery = new DeliveryExpress(purchase);
+            break;
+        case 'insured':
+            delivery = new DeliveryInsured(purchase);
+            break;
+        default:
+            delivery = new DeliveryStandard(purchase);
+            break;
+    }
+
+    return delivery;
+}
 
 class Main {
     main() {
@@ -98,7 +101,7 @@ class Main {
             product: 'Soda',
         };
 
-        const deliveryStandard = new Delivery(purchase);
+        const deliveryStandard = createDelivery(purchase);
         deliveryStandard.deliverProduct();
         deliveryStandard.trackProduct();
 
@@ -107,7 +110,7 @@ class Main {
             product: 'Café',
         };
 
-        const deliveryInsured = new Delivery(purchase);
+        const deliveryInsured = createDelivery(purchase);;
         deliveryInsured.deliverProduct();
         deliveryInsured.trackProduct();
 
@@ -116,7 +119,7 @@ class Main {
             product: 'Cereal',
         };
 
-        const deliveryExpress = new Delivery(purchase);
+        const deliveryExpress = createDelivery(purchase);
         deliveryExpress.deliverProduct();
         deliveryExpress.trackProduct();
     }
