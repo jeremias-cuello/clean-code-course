@@ -96,32 +96,26 @@ function createDelivery(purchase: Purchase): Delivery {
 
 class Main {
     main() {
-        let purchase: Purchase = {
-            deliveryType: '',
-            product: 'Soda',
-        };
+        let purchases: Array<Purchase> = [
+            {
+                deliveryType: '',
+                product: 'Soda',
+            },
+            {
+                deliveryType: 'insured',
+                product: 'Café',
+            },
+            {
+                deliveryType: 'express',
+                product: 'Cereal',
+            }
+        ];
 
-        const deliveryStandard = createDelivery(purchase);
-        deliveryStandard.deliverProduct();
-        deliveryStandard.trackProduct();
-
-        purchase = {
-            deliveryType: 'insured',
-            product: 'Café',
-        };
-
-        const deliveryInsured = createDelivery(purchase);;
-        deliveryInsured.deliverProduct();
-        deliveryInsured.trackProduct();
-
-        purchase = {
-            deliveryType: 'express',
-            product: 'Cereal',
-        };
-
-        const deliveryExpress = createDelivery(purchase);
-        deliveryExpress.deliverProduct();
-        deliveryExpress.trackProduct();
+        for (const purchase of purchases) {
+            const deliveryStandard = createDelivery(purchase);
+            deliveryStandard.deliverProduct();
+            deliveryStandard.trackProduct();
+        }
     }
 }
 
