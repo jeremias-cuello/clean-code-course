@@ -95,6 +95,7 @@ function createDelivery(purchase: Purchase): Delivery {
 }
 
 class Main {
+    // This was the class 81
     main() {
         let purchases: Array<Purchase> = [
             {
